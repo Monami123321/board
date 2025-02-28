@@ -1,4 +1,4 @@
-package com.crizen.springboard.security;
+package com.crizen.springboard.global.security;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 

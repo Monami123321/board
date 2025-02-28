@@ -10,3 +10,12 @@ spring:
     username: root
     password: 1234
 
+
+#마이바티스 설정
+mybatis:
+  type-aliases-package:
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+
