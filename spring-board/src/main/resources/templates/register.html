@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회원가입</title>
+</head>
+<body>
+<h2>회원가입</h2>
+<!--action - 제출 경로 th: 기준으로 덮기, @{} 경로 웹 앱 기준으로 변경됨, ${} 자바 표현식, 객체는 model에서 넘겨줘야 여기서 받음-->
+<form action="#" th:action="@{/register}" th:object="${userRegisterRequestDTO}" method="post">
+    <!-- 이름 필드 -->
+    <div>
+        <label for="userName">이름</label>
+<!--        th:object로 받을 객체를 지정해놓으면 th:field *{}로 값을 주면 된다고 함-->
+<!--        #fields.hasError -> 해당 속성 validation 결과, th:if는 true일 때만 출력 -->
+        <input type="text" id="userName" th:field="*{userName}" />
+        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span> <!-- 에러 메시지 출력 -->
+    </div>
+
+    <!-- 이메일 필드 -->
+    <div>
+        <label for="userMail">이메일</label>
+        <input type="email" id="userMail" th:field="*{userMail}" />
+        <span th:if="${#fields.hasErrors('userMail')}" th:errors="*{userMail}"></span> <!-- 에러 메시지 출력 -->
+    </div>
+
+    <!-- 비밀번호 필드 -->
+    <div class="d-flex">
+        <label for="userPassword">비밀번호</label>
+        <input type="password" id="userPassword" th:field="*{userPassword}" />
+        <span th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></span> <!-- 에러 메시지 출력 -->
+    </div>
+    <!-- 제출 버튼 -->
+    <div>
+        <button type="submit">회원가입</button>
+    </div>
+    <script th:if="${isFailed}">
+        alert("회원가입 실패! 다시 시도해주세요.");
+    </script>
+</form>
+
+</body>
+</html>
