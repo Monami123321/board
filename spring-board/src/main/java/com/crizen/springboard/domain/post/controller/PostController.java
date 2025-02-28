@@ -18,7 +18,7 @@ public class PostController {
         return "posts";
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public String showPostsDetailPage() {
         // 글 상세보기
         return "postDetails";
