@@ -40,13 +40,14 @@ public class AuthService implements UserDetailsService {
         }
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // AuthenticationManager가 인증 처리를 위해 이 메서드를 호출, userDetail 생성하여 반환 -> 커스텀해서 이메일도 추가하기
+        // AuthenticationManager가 인증 처리를 위해 이 메서드를 호출, userDetail 생성하여 반환 -> 커스텀
         return new CustomUser(
-                // 메일 - 비밀번호 - 권한 - 이메일도 추가로
+                // 메일 - 비밀번호 - 권한 - 이름 - ID => 메일이랑 이름 서로 바꿈 get
                 user.getUserMail(),
                 user.getUserPassword(),
                 authorities,
-                user.getUserMail()
+                user.getUserName(),
+                user.getUserId()
         );
     }
 

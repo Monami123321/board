@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시판</title>
+    <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex justify-content-between align-items-center p-3 bg-primary text-white">
+    <div class="font-weight-bold h5">게시판</div>
+    <button onclick="doLogOut()" id="logoutBtn" class="btn btn-danger" style="display: none">로그아웃</button>
+</div>
+
+<!--LocalDateTime -> 타임리프에서 적절한 포맷으로 바꿀 수 있다고 한다-->
+<!--${#dates.format(post.postDate, 'yyyy-MM-dd HH:mm:ss')} 이거 안됨 temporals 됨-->
+
+<div class="container mt-4">
+    <h2 class="text-center">글 목록</h2>
+    <table class="table table-hover mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${postList}">
+            <td th:text="${post.getPostId()}"></td>
+            <td><a th:href="@{/posts/{id}(id=${post.getPostId()})}" th:text="${post.getPostTitle()}" class="text-decoration-none"></a></td>
+            <td th:text="${post.getUserName()}"></td>
+            <td th:text="${#temporals.format(post.getPostDate(),'yyyy년 MM월 dd일 HH:mm:ss')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+        <a href="/posts/new" class="btn btn-success">새 글 작성</a>
+    </div>
+</div>
+
+<script>
+    window.onload = () => {
+        const isLoggedIn = !!sessionStorage.getItem("login");
+        document.getElementById("logoutBtn").style.display = isLoggedIn ? "block" : "none";
+    };
+    function doLogOut() {
+        sessionStorage.removeItem("login");
+        alert("로그아웃 되었습니다!");
+        location.replace("/logout");
+    }
+</script>
+
+<script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

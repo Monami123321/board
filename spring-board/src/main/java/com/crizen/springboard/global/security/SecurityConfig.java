@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 // @EnableWebSecurity에 @Configuration이 포함되어 있다고 하는데, 안 넣으면 컴파일 오류남
 @EnableWebSecurity(debug = true)
+//@EnableWebSecurity
 @EnableMethodSecurity // 메서드 수준에서 컨트롤하려면 해당 어노테이션 필요
 @Configuration
 public class SecurityConfig {

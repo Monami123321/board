@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>게시글 상세</title>
+    <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/post-detail.css}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="header d-flex justify-content-between align-items-center">
+      <div class="font-weight-bold h5">게시글 상세</div>
+      <button
+        onclick="doLogOut()"
+        id="logoutBtn"
+        class="btn btn-danger btn-sm btn-logout"
+      >
+        로그아웃
+      </button>
+    </div>
+
+    <div class="container mt-4">
+      <h2 class="post-title" th:text="${postDetail.post.getPostTitle()}"></h2>
+      <p class="post-meta">
+        <strong>작성자:</strong>
+        <span th:text="${postDetail.getUsername()}"></span>
+      </p>
+      <p class="post-meta">
+        <strong>작성일:</strong>
+        <span
+          th:text="${#temporals.format(postDetail.post.getPostDate(), 'yyyy년 MM월 dd일 HH:mm:ss')}"
+        ></span>
+      </p>
+
+      <div class="post-content">
+        <strong>내용:</strong>
+        <p th:text="${postDetail.post.getPostContent()}"></p>
+      </div>
+
+      <div class="comment-section">
+        <h3 class="comment-title">댓글</h3>
+        <ul class="list-group mt-3">
+          <li
+            class="list-group-item"
+            th:each="comment : ${postDetail.commentList}"
+          >
+            <div class="comment">
+              <div class="comment-header">
+                <span th:text="${comment.getUserName()}">작성자 이름</span>
+                <span
+                  class="comment-meta"
+                  th:text="${#temporals.format(comment.getCommentDate(), 'yyyy년 MM월 dd일 HH:mm:ss')}"
+                  >작성일</span
+                >
+              </div>
+              <!--                    <div class="comment-content" th:text="${comment.getCommentContent()}"></div>-->
+              <div class="comment-content position-relative">
+                <span th:text="${comment.getCommentContent()}"></span>
+                <button
+                  class="btn btn-danger btn-sm position-absolute"
+                  style="right: 0; top: 50%; transform: translateY(-50%)"
+                  onclick="deleteComment()"
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <a
+          th:href="@{/board/{id}/edit(id=${postDetail.post.getPostId()})}"
+          class="btn btn-warning btn-edit"
+          >수정</a
+        >
+        <button th:onclick="|fetchDeletePost(${postDetail.post.getPostId()})|" class="btn btn-danger btn-edit">
+          삭제
+        </button>
+      </div>
+    </div>
+
+    <script>
+      window.onload = () => {
+        const isLoggedIn = !!sessionStorage.getItem("login");
+        document.getElementById("logoutBtn").style.display = isLoggedIn
+          ? "block"
+          : "none";
+      };
+
+      function doLogOut() {
+        sessionStorage.removeItem("login");
+        alert("로그아웃 되었습니다!");
+        location.replace("/logout");
+      }
+    </script>
+
+    <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/posts/posts.js}"></script>
+  </body>
+</html>

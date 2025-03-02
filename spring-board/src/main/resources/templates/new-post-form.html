@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>새 글 작성</title>
+    <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex justify-content-between align-items-center p-3 bg-primary text-white">
+    <div class="font-weight-bold h5">게시판</div>
+    <button onclick="doLogOut()" id="logoutBtn" class="btn btn-danger" style="display: none">로그아웃</button>
+</div>
+
+<div class="container mt-4">
+    <h2 class="text-center">새 글 작성</h2>
+    <form>
+        <div class="mb-3">
+            <label for="postTitle" class="form-label">제목</label>
+            <input type="text" class="form-control" id="postTitle" name="postTitle" required>
+        </div>
+        <div class="mb-3">
+            <label for="postContent" class="form-label">내용</label>
+            <textarea class="form-control" id="postContent" name="postContent" rows="4" required></textarea>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="/posts" class="btn btn-secondary">취소</a>
+            <button type="button" onclick="fetchNewPost()" class="btn btn-primary">글 작성</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    window.onload = () => {
+        const isLoggedIn = !!sessionStorage.getItem("login");
+        document.getElementById("logoutBtn").style.display = isLoggedIn ? "block" : "none";
+    };
+    function doLogOut() {
+        sessionStorage.removeItem("login");
+        alert("로그아웃 되었습니다!");
+        location.replace("/logout");
+    }
+</script>
+
+<script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/posts/posts.js}"></script>
+</body>
+</html>

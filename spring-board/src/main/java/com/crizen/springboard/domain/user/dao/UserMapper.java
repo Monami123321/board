@@ -4,6 +4,7 @@ import com.crizen.springboard.domain.user.dto.User;
 import com.crizen.springboard.domain.user.dto.UserRegisterRequestDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public interface UserMapper {
     boolean insertUser(UserRegisterRequestDTO userRegisterRequestDTO);
 
     // 메일로 사용자 조회
-    @Select("SELECT * FROM users WHERE user_mail = #{userMame}")
-    User findByEmail(String userMail);
+    @Select("SELECT * FROM users WHERE user_mail = #{userMail}")
+    User findByEmail(@Param("userMail") String userMail);
 
     // 모든 사용자 조회
     @Select("SELECT * FROM users")
