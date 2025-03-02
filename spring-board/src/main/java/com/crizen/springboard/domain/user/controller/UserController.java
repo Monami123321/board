@@ -5,10 +5,9 @@ import com.crizen.springboard.domain.user.dto.UserRegisterRequestDTO;
 import com.crizen.springboard.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 // 유저 관련 처리 - 회원가입
@@ -21,24 +20,25 @@ public class UserController {
 
     // 회원가입 폼 페이지로 이동, 모두 허용
     @GetMapping
-    public String showRegisterFormPage(Model model) {
+    public String showRegisterFormPage() {
         // 회원가입 페이지 응답하기
-        model.addAttribute("userRegisterRequestDTO", new UserRegisterRequestDTO());
+//        model.addAttribute("userRegisterRequestDTO", new UserRegisterRequestDTO());
         return "register";
     }
 
     //  회원가입 요청 처리
     @PostMapping
-    public String register(@Valid @ModelAttribute UserRegisterRequestDTO userRegisterRequestDTO, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "register";
-        }
+    @ResponseBody
+    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
         // 회원가입 처리하기
-        if (!userService.register(userRegisterRequestDTO)) {
-            model.addAttribute("isFailed", true);
-            return "board";
-        }
-        return "board";
+//
+//        if (userService.register(userRegisterRequestDTO)) {
+//            res = new ResponseEntity<>("회원가입 성공!", HttpStatus.CREATED);
+//        } else {
+//            res = new ResponseEntity<>("회원가입 실패", HttpStatus.FORBIDDEN);
+//        }
+        userService.register(userRegisterRequestDTO);
+        return new ResponseEntity<>("회원가입 성공!", HttpStatus.CREATED);
     }
 
 }

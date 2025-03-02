@@ -15,8 +15,8 @@ public interface UserMapper {
     @Insert("INSERT INTO users(user_name, user_mail, user_password) VALUES(#{userName}, #{userMail}, #{userPassword})")
     boolean insertUser(UserRegisterRequestDTO userRegisterRequestDTO);
 
-    // 이름으로 사용자 조회
-    @Select("SELECT * FROM users WHERE user_name = #{userName}")
+    // 메일로 사용자 조회
+    @Select("SELECT * FROM users WHERE user_mail = #{userMame}")
     User findByEmail(String userMail);
 
     // 모든 사용자 조회
