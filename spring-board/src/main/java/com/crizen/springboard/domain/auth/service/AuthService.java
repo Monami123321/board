@@ -1,5 +1,6 @@
 package com.crizen.springboard.domain.auth.service;
 
+import com.crizen.springboard.domain.auth.dto.CustomUser;
 import com.crizen.springboard.domain.user.dao.UserMapper;
 import com.crizen.springboard.domain.user.dto.User;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +40,13 @@ public class AuthService implements UserDetailsService {
         }
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // AuthenticationManager가 인증 처리를 위해 이 메서드를 호출, userDetail 생성하여 반환
-        return new org.springframework.security.core.userdetails.User(
-                // 메일 - 비밀번호 - 권한
+        // AuthenticationManager가 인증 처리를 위해 이 메서드를 호출, userDetail 생성하여 반환 -> 커스텀해서 이메일도 추가하기
+        return new CustomUser(
+                // 메일 - 비밀번호 - 권한 - 이메일도 추가로
                 user.getUserMail(),
                 user.getUserPassword(),
-                authorities
+                authorities,
+                user.getUserMail()
         );
     }
 
