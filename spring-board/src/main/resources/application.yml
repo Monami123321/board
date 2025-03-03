@@ -6,7 +6,8 @@ spring:
     name: spring-board
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/board
+#    url: jdbc:mariadb://localhost:3306/board // 로컬에서 돌리면 루프백 참조, 컨테이너는 컨테이너 이름으로
+    url: jdbc:mariadb://mariadb:3306/board
     username: root
     password: 1234
 

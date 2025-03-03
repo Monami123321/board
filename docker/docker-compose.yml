@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: board
+      MYSQL_USER: hy
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      # mysql / mariadb -> /docker-entrypoint-initdb.d/* 경로 파일들 자동으로 db초기화에 용사
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - board  
+  spring-boot:
+    build:
+      context: ../spring-board
+    container_name: spring-board
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb #mariadb 먼저 실행되고 그 다음 올라가게
+    networks:
+      - board  
+
+volumes:
+  mariadb_data:
+networks:
+  board:
+    driver: bridge  
