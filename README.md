@@ -19,6 +19,11 @@
 - 댓글 달기
 - 댓글 삭제
 
+## ERD
+<img src="./ERD.png" width="1000" height="400"/>
+
+
+
 ## 실행
 ### Linux (docker 필요)
 ```
