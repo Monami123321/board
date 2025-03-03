@@ -75,11 +75,10 @@
         </button>
     </div>
 
-
+    <!--th:href="@{/posts/{id}/edit(id=${postDetail.post.getPostId()})}"-->
     <div class="d-flex justify-content-end gap-2">
-        <a
-                th:href="@{/board/{id}/edit(id=${postDetail.post.getPostId()})}"
-                class="btn btn-warning btn-edit"
+        <a th:onclick="|fetchEditPostForm(${postDetail.post.getPostId()})|"
+           class="btn btn-warning btn-edit"
         >수정</a
         >
         <button th:onclick="|fetchDeletePost(${postDetail.post.getPostId()})|" class="btn btn-danger btn-edit">

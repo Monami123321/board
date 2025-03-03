@@ -7,12 +7,11 @@ import com.crizen.springboard.domain.post.dto.Post;
 import com.crizen.springboard.domain.post.dto.PostDetailResponseDTO;
 import com.crizen.springboard.domain.post.dto.PostListResponseDTO;
 import com.crizen.springboard.domain.post.dto.PostWriteRequestDTO;
+import com.crizen.springboard.domain.post.exception.PostNotBelongToUserException;
+import com.crizen.springboard.domain.post.exception.PostNotFoundException;
 import com.crizen.springboard.domain.post.mapper.PostMapper;
 import com.crizen.springboard.global.security.AuthChecker;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +22,28 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final CommentServiceImpl commentService;
     private final AuthChecker authChecker;
+
+    @Override
+    public Post getPostDetailForEdit(CustomUser user, Long postId) {
+        checkEditPermission(user, postId);
+        return postMapper.findOneByPostId(postId);
+    }
+
+    @Override
+    public boolean checkEditPermission(CustomUser user, Long postId) {
+        // 게시물 조회
+        Post post = postMapper.findOneByPostId(postId);
+
+        // 없으면 예외
+        if (post == null) {
+            throw new PostNotFoundException();
+        }
+        // 작성자가 아니면 예외
+        if (user.getUserId() != post.getUserId().longValue()) {
+            throw new PostNotBelongToUserException();
+        }
+        return true;
+    }
 
     @Override
     public String getUserNameOnPost(Long postId) {
@@ -54,8 +75,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean editPost(PostWriteRequestDTO postWriteRequestDTO) {
-        return false;
+    public boolean editPost(CustomUser user, PostWriteRequestDTO dto) {
+        checkEditPermission(user, dto.getPostId());
+        return postMapper.updatePost(dto);
     }
 
     @Override
@@ -82,16 +104,4 @@ public class PostServiceImpl implements PostService {
         return user.getUserId().longValue() == userId;
     }
 
-    @Override
-    public boolean doEdit(CustomUser user, Long postId) {
-        if (!validateWriter(user, postId)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean doDelete(CustomUser user, Long postId) {
-        return false;
-    }
 }

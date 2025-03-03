@@ -2,6 +2,7 @@ package com.crizen.springboard.domain.post.controller;
 
 
 import com.crizen.springboard.domain.auth.dto.CustomUser;
+import com.crizen.springboard.domain.post.dto.Post;
 import com.crizen.springboard.domain.post.dto.PostDetailResponseDTO;
 import com.crizen.springboard.domain.post.dto.PostWriteRequestDTO;
 import com.crizen.springboard.domain.post.service.PostServiceImpl;
@@ -33,7 +34,6 @@ public class PostController {
         // 글 상세보기
         PostDetailResponseDTO dto = postService.getPostDetail(id);
         model.addAttribute("postDetail", dto);
-        System.out.println(dto.toString());
         return "post-detail";
     }
 
@@ -57,19 +57,31 @@ public class PostController {
 
     @PostMapping("/{id}/edit")
     @PreAuthorize("hasRole('USER')")
-    public String showEditPost(@AuthenticationPrincipal CustomUser user, @PathVariable Long id) {
+    public String editPost(@AuthenticationPrincipal CustomUser user, @RequestBody PostWriteRequestDTO dto) {
         // 글 수정 - 작성자만
+        dto.setUserId(user.getUserId());
+        postService.editPost(user, dto);
         return "redirect:/posts";
     }
 
-    @PutMapping
+    @GetMapping("/{id}/edit")
     @PreAuthorize("hasRole('USER')")
-    public String doEditPost(@AuthenticationPrincipal CustomUser user, @PathVariable Long id) {
-        // 글 수정 - 작성자만
-        postService.doEdit(user, id);
-        return "redirect:/posts";
+    public String showEditPostForm(@AuthenticationPrincipal CustomUser user, @PathVariable Long id, Model model) {
+        // 글 수정 폼 반환 - 작성자만
+        // 글 상세보기와 동일하게 던져주기
+        Post post = postService.getPostDetailForEdit(user, id);
+        model.addAttribute("post", post);
+        return "edit";
     }
 
+    @GetMapping("/{id}/edit/check")
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> checkEditAuth(@AuthenticationPrincipal CustomUser user, @PathVariable Long id) {
+        // 수정 권한 체크 restful
+        postService.checkEditPermission(user, id);
+        return ResponseEntity.status(HttpStatus.OK).body("글 수정 가능");
+    }
 
     @PostMapping("/{id}/delete")
     @ResponseBody

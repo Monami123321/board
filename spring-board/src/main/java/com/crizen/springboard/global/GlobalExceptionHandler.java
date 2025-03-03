@@ -1,5 +1,7 @@
 package com.crizen.springboard.global;
 
+import com.crizen.springboard.domain.post.exception.PostNotBelongToUserException;
+import com.crizen.springboard.domain.post.exception.PostNotFoundException;
 import com.crizen.springboard.domain.user.exception.UserMailDuplicatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // resful 요청은 전역 예외 핸들러로 잡기
 
+    // 해당 게시물 없음
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<String> handlePostNotFoundException(PostNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시물이 존재하지 않습니다.");
+    }
+
+    // 게시물 작성자와 요청자가 다름
+    @ExceptionHandler(PostNotBelongToUserException.class)
+    public ResponseEntity<String> handlePostNotBelongToUserException(PostNotBelongToUserException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("게시물 작성자가 아닙니다.");
+    }
+
+
+    // 전역 예외 핸들러로 잡기
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+
         return new ResponseEntity<>("잘못된 아이디 또는 비밀번호입니다.", HttpStatus.UNAUTHORIZED);
     }
 

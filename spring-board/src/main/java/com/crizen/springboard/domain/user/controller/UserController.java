@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 // 유저 관련 처리 - 회원가입
 @Controller
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class UserController {
 //            res = new ResponseEntity<>("회원가입 실패", HttpStatus.FORBIDDEN);
 //        }
         userService.register(userRegisterRequestDTO);
-        return new ResponseEntity<>("회원가입 성공!", HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/login")).body("회원가입 성공!");
     }
 
 }

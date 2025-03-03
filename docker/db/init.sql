@@ -6,7 +6,7 @@ USE `board`;
 
 CREATE TABLE `users` (
 	`user_id`	BIGINT	AUTO_INCREMENT,
-	`role_id`	BIGINT	NULL,
+	`role_id`	BIGINT	DEFAULT 2,
 	`user_name`	VARCHAR(255)	NOT NULL,
 	`user_mail`	VARCHAR(255)	NOT NULL	,
 	`user_password`	VARCHAR(255)	NOT NULL	,
@@ -49,8 +49,8 @@ VALUES
 
 INSERT INTO `users` (`role_id`, `user_name`, `user_mail`, `user_password`)
 VALUES
-(1, '관리자', 'admin@admin.com', '1234'),
-(2, '홍길동', 'kdhong@test.com', '1234');
+(1, '관리자', 'admin@admin.com', '$2a$10$UUL4RrWpIUAZPQfdaym81u6ut.r2WrjjjxIV7JvKfwJB9dxK.FY7y'),
+(2, '홍길동', 'kdhong@test.com', '$2a$10$UUL4RrWpIUAZPQfdaym81u6ut.r2WrjjjxIV7JvKfwJB9dxK.FY7y');
 
 INSERT INTO `posts` (`user_id`, `post_title`, `post_content`)
 VALUES
