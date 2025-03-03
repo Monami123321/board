@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ShowCommentDTO {
     private String userName;
+    private Long commentId;
     private String commentContent;
     private LocalDateTime commentDate;
 }

@@ -6,6 +6,7 @@ import com.crizen.springboard.domain.post.dto.PostDetailResponseDTO;
 import com.crizen.springboard.domain.post.dto.PostWriteRequestDTO;
 import com.crizen.springboard.domain.post.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -75,8 +76,10 @@ public class PostController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> deletePost(@AuthenticationPrincipal CustomUser user, @PathVariable("id") Long postId) {
         // 글 삭제 - 작성자, 관리자
-        postService.deletePost(user, postId);
-        return ResponseEntity.ok("삭제 성공!");
+        if (postService.deletePost(user, postId)) {
+            return ResponseEntity.ok("삭제 성공!");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제 실패!");
     }
 
 }

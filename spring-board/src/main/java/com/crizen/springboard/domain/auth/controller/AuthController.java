@@ -1,6 +1,7 @@
 package com.crizen.springboard.domain.auth.controller;
 
 
+import com.crizen.springboard.domain.auth.dto.CustomUser;
 import com.crizen.springboard.domain.auth.dto.LoginRequestDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -37,9 +39,10 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(@AuthenticationPrincipal CustomUser user) {
         // 로그인 페이지로 이동, 모두 허용
-        return "login";
+        // 이미 로그인 상태면 첫 화면으로 리다이렉트
+        return user == null ? "login" : "redirect:/";
     }
 
     @GetMapping("/logout")
